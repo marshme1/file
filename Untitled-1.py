@@ -78,10 +78,10 @@ def searsh_contact_one_version():
 def searsh_contact_two_version():
     print('Возможные варианты поиска: \n'
          "1. По фамилии\n"
-         "1. По имени\n"
-         "1. По отчеству\n"
-         "1. По номеру телефона\n"
-         "1. По адресу\n")
+         "2. По имени\n"
+         "3. По отчеству\n"
+         "4. По номеру телефона\n"
+         "5. По адресу\n")
     command = input("Выберите вариант поиска: ")
 
     while command not in ('1','2','3','4','5'):
@@ -98,7 +98,31 @@ def searsh_contact_two_version():
         if search in cont_list[i_search]:
             print(contact_str)
 
-searsh_contact_two_version()
+def u_interface():
+    command = ""
+    while command !="4":
+        print('Меню: \n'
+            "1. Добавить контакт\n"
+            "2. Найти контакт\n"
+            "3. Вывести все контакты\n"
+            "4. Выход\n")
+        command = input("Выберите пункт меню: ")
+        while command not in ('1','2','3','4','5'):
+            print('Некорректный ввод')
+            command = input("Выберите пункт меню: ")
+
+        match command:
+            case "1":
+                input_data()
+            case "2":
+                searsh_contact_two_version()
+            case "3":
+                print_data()
+            case "4":
+                print("Всего хорошего")
+
+u_interface()
+#searsh_contact_two_version()
 #file_append()
 #input_data()
 #print_data()
