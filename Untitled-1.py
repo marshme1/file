@@ -30,13 +30,15 @@
 #
 
 #('phonebook.txt','a')
+import os 
 
-def file_read():
-    with open('phonebook.txt','r', encoding='UTF-8') as file:
+def file_read(file_d = 'phonebook.txt'):
+    
+    with open(file_d,'r', encoding='UTF-8') as file:
         return file.read()
 
-def file_append(text=''):
-    with open('phonebook.txt','a', encoding='UTF-8') as file:
+def file_append(text='', file_d = 'phonebook.txt'):
+    with open(file_d,'a', encoding='UTF-8') as file:
         file.write(text)
 
 def input_name():
@@ -54,15 +56,24 @@ def input_ph():
 def input_adr():
     return input('Введите адрес ')
 
-def input_data():
+def input_data(file_d = 'phonebook.txt'):
+    global id
+    contacts_list = file_read().rstrip().split("\n\n") #разбиваем весь текст в файле на строки. Rstrip для удаления пробелов
+    if file_read(file_d)=='':
+        id =1
+    else:
+        id=len(contacts_list)+1
     son = input_son()
     name = input_name()
     pat = input_pat()
     ph = input_ph()
     adr = input_adr()
 
-    contact_str = f"{son} {name} {pat} {ph}\n{adr}\n\n"
-    file_append(contact_str)
+    contact_str = f"{id} {son} {name} {pat} {ph}\n{adr}\n\n"
+    #id = id+1
+    file_append(contact_str, file_d)
+
+
 
 def print_data():
     print(file_read())
@@ -88,7 +99,7 @@ def searsh_contact_two_version():
         print('Некорректный ввод')
         command = input("Выберите вариант поиска: ")
 
-    i_search = int(command)-1
+    i_search = int(command)
 
     search = input("Введите данные для поиска: ")
     contacts_list = file_read().rstrip().split("\n\n") #разбиваем весь текст в файле на строки. Rstrip для удаления пробелов
@@ -98,14 +109,59 @@ def searsh_contact_two_version():
         if search in cont_list[i_search]:
             print(contact_str)
 
+def copy_data(file_d, list):
+        
+    isFile=os.path.isfile(f"G:\Python\{file_d}") 
+    if not isFile:
+        file_append('', file_d)
+    contacts_list = file_read(file_d).rstrip().split("\n\n") #разбиваем весь текст в файле на строки. Rstrip для удаления пробелов
+    
+    if file_read(file_d)=='':
+        id =1
+    else:
+        id=len(contacts_list)+1
+    son = list[1]
+    name = list[2]
+    pat = list[3]
+    ph = list[4]
+    adr = list[5]
+
+    contact_str = f"{id} {son} {name} {pat} {ph}\n{adr}\n\n"
+    #id = id+1
+    file_append(contact_str, file_d)
+
+def copy_contact():
+    #with open('phonebook.txt','r') as firstfile, open('second.txt','a') as secondfile:
+        #for line in firstfile: 
+            #secondfile.write(line)
+    number = input("Введите номер строки для копирования: ")
+
+
+    contacts_list = file_read().rstrip().split("\n\n")
+    
+    flag = False
+    file = input("Введите название файла, куда требуется скопировать контакт: ")
+    contacts_list = file_read().rstrip().split("\n\n") #разбиваем весь текст в файле на строки. Rstrip для удаления пробелов
+    for contact_str in contacts_list:  #ищем совпадение 
+        cont_list = contact_str.replace('\n',' ').split()
+        if number in cont_list[0]:
+            copy_data(file, cont_list)
+            flag = True
+           
+    if flag == False:
+        print('Такой строки нет!')   
+            
+        
+
 def u_interface():
     command = ""
-    while command !="4":
+    while command !="5":
         print('Меню: \n'
             "1. Добавить контакт\n"
             "2. Найти контакт\n"
             "3. Вывести все контакты\n"
-            "4. Выход\n")
+            "4. Копировать контакт в другой файл\n"
+            "5. Выход\n")
         command = input("Выберите пункт меню: ")
         while command not in ('1','2','3','4','5'):
             print('Некорректный ввод')
@@ -119,10 +175,14 @@ def u_interface():
             case "3":
                 print_data()
             case "4":
+                copy_contact()
+            case "5":
                 print("Всего хорошего")
-
 u_interface()
 #searsh_contact_two_version()
 #file_append()
 #input_data()
 #print_data()
+#copy_contact()
+
+#contact_str = f"{id} {son} {name} {pat} {ph}\n{adr}\n\n"
